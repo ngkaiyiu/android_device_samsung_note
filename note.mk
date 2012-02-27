@@ -187,12 +187,12 @@ PRODUCT_PACKAGES += \
 
 # other kernel modules not in ramdisk
 PRODUCT_COPY_FILES += $(foreach module,\
-	$(filter-out $(RAMDISK_MODULES),$(wildcard device/samsung/note/*.ko)),\
+	$(filter-out $(RAMDISK_MODULES),$(wildcard device/samsung/note/modules/*.ko)),\
 	$(module):system/lib/modules/$(notdir $(module)))
 
 # kernel modules for recovery ramdisk
 PRODUCT_COPY_FILES += \
-    device/samsung/note/j4fs.ko:recovery/root/lib/modules/j4fs.ko
+    device/samsung/note/modules/j4fs.ko:recovery/root/lib/modules/j4fs.ko
 
 ifeq ($(TARGET_PREBUILT_KERNEL),)
     LOCAL_KERNEL := device/samsung/note/kernel
