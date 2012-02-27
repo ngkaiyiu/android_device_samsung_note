@@ -34,9 +34,6 @@
 # and is used by people who have access to binary versions of the drivers
 # but not to the original vendor tree. Be sure to update both.
 
-# include common makefile for c1 platform
-$(call inherit-product-if-exists, device/samsung/c1-common/common.mk)
-
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
 	frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
@@ -57,11 +54,6 @@ PRODUCT_COPY_FILES += \
 	frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
 	packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml
 
-# Device specific apps
-PRODUCT_PACKAGES += \
-    SamsungServiceMode \
-    C1Parts
-
 # Camera
 PRODUCT_PACKAGES += \
 	Camera
@@ -69,15 +61,10 @@ PRODUCT_PACKAGES += \
 # Init files
 PRODUCT_COPY_FILES := \
 	device/samsung/note/lpm.rc:root/lpm.rc \
-	device/samsung/note/init.smdkv310.usb.rc:root/init.smdkv310.usb.rc \
-	device/samsung/note/init.smdkc210.rc:root/init.smdkc210.rc \
-	device/samsung/note/init.smdkv310.rc:root/init.smdkv310.rc \
-	device/samsung/note/ueventd.smdkv310.rc:root/ueventd.smdkv310.rc
-
-# APNs - REMOVE IF VENDOR CYANOGEN IS BACK
-PRODUCT_COPY_FILES += \
-	device/samsung/note/configs/apns-conf.xml:system/etc/apns-conf.xml \
-	device/samsung/note/configs/spn-conf.xml:system/etc/spn-conf.xml
+	device/samsung/note/lpm.rc:recovery/root/lpm.rc \
+	device/samsung/note/recovery.rc:recovery/root/recovery.rc \
+	device/samsung/note/init.smdk4210.rc:root/init.smdk4210.rc \
+	device/samsung/note/init.smdk4210.usb.rc:root/init.smdk4210.usb.rc \
 
 # Bluetooth configuration files
 PRODUCT_COPY_FILES += \
@@ -114,9 +101,6 @@ PRODUCT_PROPERTY_OVERRIDES := \
     ro.opengles.version=131072 \
     hwui.render_dirty_regions=false \
     hwui.disable_vsync=true
-
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.sf.lcd_density=284
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
@@ -165,8 +149,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 # kernel modules for ramdisk
-RAMDISK_MODULES = $(addprefix device/samsung/note/,bthid.ko dhd.ko gspca_main.ko j4fs.ko \
-	scsi_wait_scan.ko Si4709_driver.ko vibrator.ko)
+RAMDISK_MODULES = $(addprefix device/samsung/note/modules/,dhd.ko j4fs.ko \
+	scsi_wait_scan.ko)
 PRODUCT_COPY_FILES += $(foreach module,\
 	$(RAMDISK_MODULES),\
 	$(module):root/lib/modules/$(notdir $(module)))

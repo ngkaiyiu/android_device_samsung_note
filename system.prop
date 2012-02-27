@@ -1,10 +1,7 @@
 #
-# system.prop for asop5000
+# system.prop for smdk4210
 #
 
 rild.libpath=/system/lib/libsec-ril.so
 rild.libargs=-d /dev/ttyS0
-
-persist.sys.strictmode.visual=0
-
-#dalvik.vm.heapsize=128m
+ro.sf.lcd_density=320

@@ -1,0 +1,275 @@
+on early-init
+    start ueventd
+
+on init
+# Vibetonz
+    export VIBE_PIPE_PATH /dev/pipes
+    mkdir /dev/pipes 0771 shell shell
+
+sysclktz 0
+
+loglevel 3
+
+    mkdir /mnt/.lfs 0755 root root
+
+    write /proc/sys/kernel/panic_on_oops 1
+    write /proc/sys/kernel/hung_task_timeout_secs 0
+    write /proc/cpu/alignment 4
+    write /proc/sys/kernel/sched_latency_ns 10000000
+    write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
+    write /proc/sys/kernel/sched_compat_yield 1
+    write /proc/sys/kernel/sched_child_runs_first 0
+    
+on fs
+# mount ext4 partitions
+    # Mount /system rw first to give the filesystem a chance to save a checkpoint
+    mount ext4 /dev/block/mmcblk0p9 /system noatime wait ro 
+    mount ext4 /dev/block/mmcblk0p7 /cache nosuid nodev noatime wait
+
+    mkdir /efs
+    mount ext4 /dev/block/mmcblk0p1 /efs nosuid nodev noatime wait 
+    chown radio system /efs
+    chmod 0771 /efs
+
+on post-fs
+    mount ext4 /dev/block/mmcblk0p10 /data nosuid nodev noatime wait noauto_da_alloc
+
+    insmod /lib/modules/j4fs.ko
+    mount j4fs /dev/block/mmcblk0p4 /mnt/.lfs
+
+on post-fs-data
+   
+    # GPS
+    chown root system /dev/ttySAC1
+    chmod 0660 /dev/ttySAC1
+    chown root system /sys/class/sec/gps/GPS_PWR_EN/value
+    chmod 0664 /sys/class/sec/gps/GPS_PWR_EN/value
+    chown root system /sys/class/sec/gps/GPS_nRST/value
+    chmod 0664 /sys/class/sec/gps/GPS_nRST/value    
+    mkdir /data/gps 771 system system
+    chown system system /data/gps
+
+#DRM directory creation
+    mkdir /system/etc/security/.drm 0775
+    chown root root /system/etc/security/.drm
+    chmod 0775 /system/etc/security/.drm
+
+    # Added for Playready DRM Support
+    mkdir /data/data/.drm 0775
+    chown drm system /data/data/.drm
+    chmod 0775 /data/data/.drm
+    mkdir /data/data/.drm/.playready 0775
+    chown drm system /data/data/.drm/.playready
+    chmod 0775 /data/data/.drm/.playready
+
+    #Added drm folder to copy drm plugins
+    mkdir /system/lib/drm 0775
+    chown root root /system/lib/drm
+    chmod 0775 /system/lib/drm
+
+    # DivX DRM
+    mkdir /efs/.files 0775
+    mkdir /efs/.files/.dx1 0775
+    mkdir /efs/.files/.dm33 0775
+    mkdir /efs/.files/.mp301 0775
+    chown media system /efs/.files/.dx1
+    chown media system /efs/.files/.dm33
+    chown media system /efs/.files/.mp301
+    chmod 0775 /efs/.files/.dx1
+    chmod 0775 /efs/.files/.dm33
+    chmod 0775 /efs/.files/.mp301    
+	
+# MTP Device permission.
+	chmod 0660 /dev/usb_mtp_gadget
+	chown system system /dev/usb_mtp_gadget
+
+    # setup for alsa snd device
+    chmod 0770 /dev/snd/pcmC0D0c
+    chmod 0770 /dev/snd/pcmC0D0p
+    chmod 0770 /dev/snd/controlC0
+    chmod 0770 /dev/snd/timer
+    chmod 0770 /dev/snd/hwC0D0
+
+    # create log system
+    mkdir /data/log 0775 system log
+    chown system log /data/log
+
+    chmod 0775 /data/log
+    chmod 0775 /data/anr
+
+    chmod 0662 /dev/log/radio
+    chmod 0662 /dev/log/main
+    chmod 0662 /dev/log/event
+
+on boot
+
+    chown system system /sys/class/backlight/pwm-backlight/brightness
+    chmod 0660 /sys/class/backlight/pwm-backlight/brightness
+    chown radio system /sys/devices/virtual/misc/melfas_touchkey/brightness
+    chmod 0660 /sys/devices/virtual/misc/melfas_touchkey/brightness
+
+#panorama directory creation
+    mkdir /data/pxtmpdir 0775
+    chown system system /data/pxtmpdir
+    chmod 0775 /data/pxtmpdir
+
+# Permissions for dvfs lock
+    chown system system /sys/power/cpufreq_max_limit
+    chown system system /sys/power/cpufreq_min_limit
+    chmod 0660 /sys/power/cpufreq_max_limit
+    chmod 0660 /sys/power/cpufreq_min_limit
+
+# Permissions for gpio_keys.
+    chown radio system /sys/class/sec/sec_key/wakeup_keys 
+    write /sys/class/sec/sec_key/wakeup_keys  102,116
+
+# Add permission for ATM. 2010.03.20
+    chown system radio /sys/devices/platform/i2c-gpio.9/i2c-9/9-0036/power_supply/fuelgauge/fg_read_soc
+    chown system radio /sys/devices/platform/i2c-gpio.9/i2c-9/9-0036/power_supply/fuelgauge/fg_reset_soc
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_lpm_state
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/fg_psoc
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/system_rev
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_current_adc
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_test_value
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_temp_adc_spec
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_temp_check
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_full_check
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_type
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/mp3
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/video
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_lp_charging
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/charging_source
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_temp_adc_avg
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_temp_adc
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_temp
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_vfocv
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_soc
+    chown system radio /sys/devices/platform/sec-battery/power_supply/battery/batt_vol
+
+# Permisions for sensors
+    chown radio system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_selftest
+    chown radio system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_get_temp
+    chown radio system /sys/devices/virtual/K3G_GYRO-dev/k3g/gyro_power_on
+    chown radio system /sys/devices/virtual/accelerometer/accelerometer/acc_file
+    chown radio system /sys/devices/virtual/sec/gsensorcal/calibration
+    chown radio system /sys/class/sensors/barometer_sensor/eeprom_check
+    chown radio system /sys/class/sensors/barometer_sensor/sea_level_pressure
+
+# permissions for NFC
+    setprop ro.nfc.port "I2C"
+    chmod 0600 /dev/pn544
+    chown nfc nfc /dev/pn544
+
+# Device Encryption by B2B Security Lab. 
+    setprop ro.crypto.keyfile.userdata /efs/metadata
+    
+# fake some battery state
+    setprop status.battery.state Slow
+    setprop status.battery.level 5
+    setprop status.battery.level_raw  50
+    setprop status.battery.level_scale 9
+
+# Permissions for bluetooth
+    setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
+    chown bluetooth bluetooth ro.bt.bdaddr_path
+    chown bluetooth bluetooth /dev/ttySAC0
+    chmod 0600 /dev/ttySAC0
+    chmod 0660 /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
+
+# Vibetonz
+    chmod 0660 /dev/tspdrv
+    chown root shell /dev/tspdrv
+
+# Permissions for LCD
+    chown system radio /sys/class/lcd/panel/lcd_power
+    chown system radio /sys/class/lcd/panel/lcd_type
+    chown system media_rw /sys/class/lcd/panel/gamma_mode
+    chown system media_rw /sys/class/lcd/panel/power_reduce
+
+# Permissions for WACOM
+    chown system radio /sys/class/sec/sec_epen/epen_firm_update
+    chown system radio /sys/class/sec/sec_epen/epen_rotation
+    chown system radio /sys/class/sec/sec_epen/epen_hand
+    chown system radio /sys/class/sec/sec_epen/epen_reset
+    chown system radio /sys/class/sec/sec_epen/epen_reset_result
+    chown system radio /sys/class/sec/sec_epen/epen_checksum
+    chown system radio /sys/class/sec/sec_epen/epen_checksum_result
+
+# Permissions for Touchkey
+  	chown system radio /sys/class/sec/sec_touchkey/enable_disable 
+	chown system radio /sys/class/sec/sec_touchkey/touchkey_brightness
+	chown system radio /sys/class/sec/sec_touchkey/touchkey_menu
+	chown system radio /sys/class/sec/sec_touchkey/touchkey_back
+	chown system radio /sys/class/sec/sec_touchkey/touch_update
+	chown system radio /sys/class/sec/sec_touchkey/touch_version
+	chown system radio /sys/class/sec/sec_touchkey/touchkey_firm_version_panel
+	chown system radio /sys/class/sec/sec_touchkey/touchkey_firm_version_phone
+	chown system radio /sys/class/sec/sec_touchkey/touchkey_firm_update_status
+	chown system radio /sys/class/sec/sec_touchkey/touchkey_firm_update
+
+# Permissions for mDNIe
+    chown system media_rw /sys/class/mdnie/mdnie/mode
+    chown system media_rw /sys/class/mdnie/mdnie/outdoor
+    chown system media_rw /sys/class/mdnie/mdnie/scenario
+
+# Permissions for uart_sel and usb_sel
+    chown system radio /sys/class/sec/switch/uart_sel/value
+    chown system radio /sys/class/sec/switch/usb_sel
+    chown system radio /mnt/.lfs/sw_sel
+
+# Permission for radio
+    chown system radio /sys/devices/platform/s5p-ehci/ehci_power
+    chown system radio /sys/devices/platform/s5p-ehci/ehci_runtime
+
+# +++++++++++++++++++++++++++++++++++++++++++
+# for datarouter
+    chown system system /dev/ttyGS0
+    chown system system /dev/dun
+# +++++++++++++++++++++++++++++++++++++++++++   
+
+# DVFS - cpufreq ondemand
+    write /sys/devices/system/cpu/cpufreq/ondemand/down_differential 5
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 85
+
+# DVFS - limit cpufreq during booting sequence
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor userspace
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed 1000000
+    write /data/dvfs "sleep 10 && echo 800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed && sleep 30 && echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
+    chmod 0770 /data/dvfs
+
+## Daemon processes to be run by init.
+##
+
+# for bluetooth
+service hciattach /system/bin/brcm_patchram_plus --enable_hci --enable_lpm --no2bytes --tosleep 50000 \
+	--baudrate 3000000 --use_baudrate_for_download --patchram /system/bin/bcm4330B1.hcd \
+	--scopcm=0,0,0,0,0,0,0,3,3,0  /dev/ttySAC0
+    class main
+    user bluetooth
+    group bluetooth net_bt_admin
+    disabled
+    oneshot
+
+# bluetooth mac address
+service bdaddr /system/bin/bdaddr_read
+    class main
+    user root
+    disabled
+    oneshot
+
+# end of wifi
+
+# TVout
+service TvoutService_C /system/bin/bintvoutservice
+     class main
+     user system
+     group graphics	
+
+# bugreport is triggered by holding down volume down, volume up and power
+service bugreport /system/bin/bugmailer.sh -v
+    class main
+	disabled
+	oneshot
+	keycodes 114 115 116
