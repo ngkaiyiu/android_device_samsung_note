@@ -58,6 +58,14 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
 	Camera
 
+# Libs
+PRODUCT_PACKAGES := \
+        gps.exynos4 \
+        sensors.exynos4 \
+        bdaddr_read \
+	TvOutHack \
+	TvOut
+
 # Init files
 PRODUCT_COPY_FILES := \
 	device/samsung/note/lpm.rc:root/lpm.rc \
