@@ -93,7 +93,22 @@ PRODUCT_COPY_FILES += \
 	device/samsung/note/keylayout/qwerty.kl:system/usr/keylayout/qwerty.kl \
 	device/samsung/note/keylayout/sec_jack.kl:system/usr/keylayout/sec_jack.kl \
 	device/samsung/note/keylayout/sec_key.kl:system/usr/keylayout/sec_key.kl \
-	device/samsung/note/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl
+	device/samsung/note/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl \
+        device/samsung/note/keylayout/Generic.kl:system/usr/keylayout/Generic.kl \
+        device/samsung/note/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+        device/samsung/note/keylayout/max8997-muic.kl:system/usr/keylayout/max8997-muic.kl \
+        device/samsung/note/keylayout/melfas-touchkey.kl:system/usr/keylayout/melfas-touchkey.kl \
+        device/samsung/note/keylayout/samsung-keypad.kl:system/usr/keylayout/samsung-keypad.kl \
+        device/samsung/note/keylayout/sii9234_rcp.kl:system/usr/keylayout/sii9234_rcp.kl \
+        device/samsung/note/keylayout/Vendor_045e_Product_028e.kl:system/usr/keylayout/Vendor_045e_Product_028e.kl \
+        device/samsung/note/keylayout/Vendor_046d_Product_c216.kl:system/usr/keylayout/Vendor_046d_Product_c216.kl \
+        device/samsung/note/keylayout/Vendor_046d_Product_c294.kl:system/usr/keylayout/Vendor_046d_Product_c294.kl \
+        device/samsung/note/keylayout/Vendor_046d_Product_c299.kl:system/usr/keylayout/Vendor_046d_Product_c299.kl \
+        device/samsung/note/keylayout/Vendor_046d_Product_c532.kl:system/usr/keylayout/Vendor_046d_Product_c532.kl \
+        device/samsung/note/keylayout/Vendor_04e8_Product_7021.kl:system/usr/keylayout/Vendor_04e8_Product_7021.kl \
+        device/samsung/note/keylayout/Vendor_054c_Product_0268.kl:system/usr/keylayout/Vendor_054c_Product_0268.kl \
+        device/samsung/note/keylayout/Vendor_05ac_Product_0239.kl:system/usr/keylayout/Vendor_05ac_Product_0239.kl \
+        device/samsung/note/keylayout/Vendor_22b8_Product_093d.kl:system/usr/keylayout/Vendor_22b8_Product_093d.kl 
 
 # The OpenGL ES API level that is natively supported by this device.
 # This is a 16.16 fixed point number
