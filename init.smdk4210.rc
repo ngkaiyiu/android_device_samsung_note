@@ -6,6 +6,10 @@ on init
     export VIBE_PIPE_PATH /dev/pipes
     mkdir /dev/pipes 0771 shell shell
 
+# Backwards compatbiity
+    symlink /mnt/emmc /emmc
+    symlink /mnt/sdcard /sdcard
+
 sysclktz 0
 
 loglevel 3

@@ -73,7 +73,11 @@ PRODUCT_COPY_FILES += \
 # Wifi
 PRODUCT_COPY_FILES += \
 	device/samsung/note/configs/nvram_net.txt:system/etc/nvram_net.txt \
-	device/samsung/note/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+	device/samsung/note/configs/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+        device/samsung/note/configs/nvram_mfg.txt:system/etc/wifi/nvram_mfg.txt \
+        device/samsung/note/configs/nvram_mfg.txt_murata:system/etc/wifi/nvram_mfg.txt_murata \
+        device/samsung/note/configs/nvram_mfg.txt_semcove:system/etc/wifi/nvram_mfg.txt_semcove \
+        device/samsung/note/configs/nvram_net.txt_murata:system/etc/wifi/nvram_net.txt_murata \
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/firmware/bcm4330/device-bcm.mk)
 

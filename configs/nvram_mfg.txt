@@ -11,10 +11,10 @@ xtalfreq=37400
 xtalmode=0x20,0x4,0
 boardnum=22
 macaddr=00:90:4c:c5:12:38
-ag0=252
+ag0=255
 ag1=255
 aa2g=1
-ccode=GB
+ccode=ALL
 
 btc_params80=0
 btc_params6=10
@@ -51,7 +51,7 @@ pa1hib1=64782
 pa1hib2=65321
 
 # 2G PA offset B42G_R08_110825
-maxp2ga0=80
+maxp2ga0=76
 sromrev=3
 cckpo=0
 ofdm2gpo=0x66666666
