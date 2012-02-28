@@ -74,7 +74,6 @@ BOARD_CAMERA_LIBRARIES := libcamera
 endif
 
 # Audio
-BOARD_USES_AUDIO_LEGACY := true
 BOARD_USE_YAMAHAPLAYER := true
 
 # FM Radio
@@ -116,13 +115,13 @@ BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
 BOARD_VOLD_DISC_HAS_MULTIPLE_MAJORS := true
 
 # Vibrator
-BOARD_HAS_VIBRATOR_IMPLEMENTATION := ../../device/samsung/note/vibrator/tspdrv.c
+# BOARD_HAS_VIBRATOR_IMPLEMENTATION := ../../device/samsung/note/vibrator/tspdrv.c
+# Sad enough problems with it :(
 
 # Recovery
 BOARD_HAS_NO_MISC_PARTITION := true 
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/note/recovery/recovery_keys.c
 BOARD_CUSTOM_GRAPHICS := ../../../device/samsung/note/recovery/graphics.c
-BOARD_USES_MMCUTILS := true
 
 BOARD_CUSTOM_BOOTIMG_MK := device/samsung/note/shbootimg.mk
